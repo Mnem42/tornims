@@ -10,6 +10,7 @@ class APIAccess{
     }
 
     search_set(item_set,set_name){
+
         let filtered = this.#data[set_name]
             .filter(x => item_set.filter(y => {
                 return x.name.includes(y)
@@ -17,23 +18,10 @@ class APIAccess{
         
         let is_all_same = filtered.every(x => x.toString() === filtered[0].toString());
 
-        if (set_name === "medical"){
-            let tmp = {};
-            filtered.forEach(x =>{
-                tmp[x.ID] = x;
-            })
-
-            return{
-                "sets": tmp,
-                "is_same": is_all_same
-            }
-        }
-
-        let tmp = {};
+        let tmp = {}
         filtered.forEach(x =>{
             tmp[x.ID] = x;
         })
-
         return{
             "sets": tmp,
             "is_same": is_all_same
@@ -46,6 +34,9 @@ class APIAccess{
     }
 
     get_user(id){
+        if (id === null){
+            return ""
+        }
         return (this.#data.members[id.toString()]);
     }
 }

@@ -1,16 +1,25 @@
 document.getElementById('load').onclick = async function() {
     let access = new APIAccess();
-    await access.init("J7ZMdvtWhbKU5ENd");
+    await access.init(document.getElementById("apikey").value);
 
     let items = document.getElementById("items").value.split(",");
     
-    const tmp = access.search_set(items,"armory");
-    const kvps = Object.keys(tmp.sets).map((key) => [key, tmp.sets[key]]);
-    console.log(kvps);
+    let tmp = access.search_set(items,"armor");
+    tmp = Object.keys(tmp.sets).map(x => tmp.sets[x]);
+
+    document.getElementById("target").innerHTML = "";
+
     tableCreate(
-        ["Item", "Members with item"],
-        kvps.map(x => Array(x[0],x[1].map(x => access.get_user(x).name))),
-        document.body
+        ["Item", "Available", "Loaned", "Total", "Loaning members"],
+        tmp.map(x => {
+            if (x.loaned_to === null) {
+                return Array(x.name,x.available,x.loaned,x.quantity,"")
+            }
+
+            const loaned_members = x.loaned_to.split(',').map(x => access.get_user(x).name);
+            return Array(x.name,x.available,x.available,x.loaned,loaned_members)
+        }),
+        document.getElementById("target")
     );
     //document.getElementById("loadouts").innerText = JSON.stringify(access.get_free_of([399,219]));
 }

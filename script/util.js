@@ -9,11 +9,9 @@ function tableCreate(titles, arr, container) {
   
     for (let i = 0; i < arr.length; i++) {
         const tr = tbl.insertRow();
-        tr.insertCell()
-          .appendChild(document.createTextNode(`${arr[i][0]}`));
-        tr.insertCell()
-          .appendChild(document.createTextNode(`${arr[i][1]}`));
-    
+        arr[i].forEach( x => tr.insertCell()
+                             .appendChild(document.createTextNode(`${x}`))
+        )
     }
     container.appendChild(tbl);
   }
